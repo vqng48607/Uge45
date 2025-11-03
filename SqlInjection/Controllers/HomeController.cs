@@ -34,13 +34,13 @@ namespace SqlInjection.Controllers
             ValidateText(name);
 
             var conn = _context.Database.GetDbConnection();
-            var query = "SELECT FirstName, LastName FROM Student WHERE FirstName Like '%" + name + "%'";
+            var query = "SELECT FirstName, LastName FROM Student WHERE FirstName Like @name";
             IEnumerable<Student> students;
 
             try
             {
                 await conn.OpenAsync();
-                students = await conn.QueryAsync<Student>(query);
+                students = await conn.QueryAsync<Student>(query, new { name = "%" + name + "%" });
             }
 
             finally
